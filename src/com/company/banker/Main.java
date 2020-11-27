@@ -7,7 +7,6 @@ public class Main {
 	static PCB p = new PCB();
 	
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
 
 		p.init();
 
@@ -18,24 +17,20 @@ public class Main {
 
 	public static void init() {
 
-		System.out.println("1. 输入资源分配");
+		System.out.println("1. 初始化资源分配");
 
 		System.out.println("2. 查看资源分配表");
 
 		System.out.println("3. 请求资源");
 
 		System.out.println("4. 退出");
-		// PCB.init();
+
 		System.out.println("请输入: ");
 	}
 	
 	public static void command() {
 
 		Scanner input = new Scanner(System.in);
-
-		p.requestResource(input);
-
-		p.show();
 
 		while (input.hasNext()) {
 
@@ -44,6 +39,10 @@ public class Main {
 			switch (commandCode) {
 
 			case 1:
+
+				p.init();
+
+				p.show();
 
 				break;
 

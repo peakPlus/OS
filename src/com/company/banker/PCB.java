@@ -111,9 +111,17 @@ public class PCB {
 
     public void requestResource(Scanner input) {
 
-        int processN = 0;
+//        int processN = 0;
 
-        int[] requestResArr = {1, 2, 2};
+//        int[] requestResArr = {1, 2, 2};
+
+        System.out.println("请输入请求资源号：");
+
+        int processN = input.nextInt();
+
+        System.out.println("请输入请求资源数：");
+
+        int[] requestResArr = {input.nextInt(), input.nextInt(), input.nextInt()};
 
         if (!isOverflowAval(requestResArr)) {
 
@@ -136,6 +144,16 @@ public class PCB {
             }
 
             if (!isSafeAllocation()) {
+
+                for (int i = 0; i < resourceLen; i++) {
+
+                    Available[i] += requestResArr[i];
+
+                    Need[processN][i] += requestResArr[i];
+
+                    Allocation[processN][i] -= requestResArr[i];
+
+                }
 
                 System.out.println("分配后系统将进入不安全状态，分配失败");
 
@@ -190,8 +208,6 @@ public class PCB {
 
     public boolean isSafeAllocation() {
 
-        boolean flag = true;
-
         int[] Work = new int[resourceLen];
 
         for (int i = 0; i < resourceLen; i++) {
@@ -200,25 +216,17 @@ public class PCB {
 
         }
 
-        int n;
+        int n = 0;
 
-        int m;
-
-        while (true) {
-
-            n = 0;
-
-            m = 0;
+        for (int k = 0; k < processLen; k++) {
 
             for (int i = 0; i < processLen; i++) {
 
                 if (Finish[i] == false) {
 
-                    n++;
-
                     if (isCanRecoverRes(Work, i)) {
 
-                        m++;
+                        n++;
 
                         Finish[i] = true;
 
@@ -236,21 +244,19 @@ public class PCB {
 
             }
 
-            if (m == 0) break;
-
         }
 
-        return n == 0;
+        return n == processLen;
 
     }
 
-    public boolean isCanRecoverRes(int[] requestResArr, int processN) {
+    public boolean isCanRecoverRes(int[] Work, int processN) {
 
         boolean flag = true;
 
         for (int i = 0; i < resourceLen; i++) {
 
-            if (Max[processN][i] > requestResArr[i] + Allocation[processN][i]) {
+            if (Max[processN][i] > Work[i] + Allocation[processN][i]) {
 
                 flag = false;
 
@@ -292,30 +298,30 @@ public class PCB {
             System.out.printf("%3s", Work[j]);
         }
 
-		System.out.printf("|");
+        System.out.printf("|");
         for (int j = 0; j < resourceLen; j++) {
 
             System.out.printf("%3s", Need[i][j]);
         }
 
-		System.out.printf("|");
+        System.out.printf("|");
         for (int j = 0; j < resourceLen; j++) {
 
             System.out.printf("%3s", Allocation[i][j]);
 
         }
 
-		System.out.printf("|");
+        System.out.printf("|");
         for (int j = 0; j < resourceLen; j++) {
 
             System.out.printf("%3s", Work[j] + Allocation[i][j]);
 
         }
 
-		System.out.printf("|");
+        System.out.printf("|");
 
-		System.out.printf("%9s", Finish[i]);
+        System.out.printf("%9s", Finish[i]);
 
-		System.out.println();
+        System.out.println();
     }
 }
